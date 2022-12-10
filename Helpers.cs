@@ -7,6 +7,10 @@ using System.Net.Http;
 namespace aoc;
 
 public static class Helpers {
+  public static bool IsSubset(int a1, int a2, int b1, int b2) => a1 <= b1 && b2 <= a2;
+
+  public static bool Overlaps(int a1, int a2, int b1, int b2) => a2 >= b1 && b2 >= a1;
+
   public static string[] ToLines(this string input) => input.Split('\n');
 
   public static string ReadStdin() {
@@ -23,7 +27,7 @@ public static class Helpers {
       throw new ArgumentException(nameof(srcArray));
 
     a0 = srcArray[0];
-    a1 = srcArray[0];
+    a1 = srcArray[1];
   }
 
   public static void Deconstruct<T>(this T[] srcArray, out T a0, out T a1, out T a2) {
@@ -36,7 +40,10 @@ public static class Helpers {
   }
 
   public static async Task<string?> GetConfig(string filepath, string key) {
-    var config = (await File.ReadAllTextAsync(filepath)).ToLines().Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => l.Split('=')).ToDictionary(x => x[0], x => x[1]);
+    var config = (await File.ReadAllTextAsync(filepath))
+      .ToLines()
+      .Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => l.Split('='))
+      .ToDictionary(x => x[0], x => x[1]);
 
     return config.ContainsKey(key) ? config[key] : null;
   }
@@ -56,16 +63,17 @@ public static class Helpers {
   }
 
   public static string GenerateClass(int year, int day) {
-    return $@"
-using System.Linq;
+    return $@"using System.Linq;
 
 namespace aoc.Year{year};
 
 public class Day{day} : IDay {{
   public void PartOne(string input) {{
+    Console.WriteLine(""Part One"");
   }}
 
   public void PartTwo(string input) {{
+    Console.WriteLine(""Part Two"");
   }}
 }}";
   }
