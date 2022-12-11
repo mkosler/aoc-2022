@@ -31,9 +31,7 @@ public class Day11 : IDay {
     public (int Monkey, long Item) Next(long reduce) {
       Count++;
 
-      var item = _reduction(_operation(_items.Dequeue()));
-
-      if (reduce != null) item = item % reduce;
+      var item = _reduction(_operation(_items.Dequeue())) % reduce;
 
       return (_test(item), item);
     }
