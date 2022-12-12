@@ -66,7 +66,7 @@ public class Day7 : IDay {
       if (l.StartsWith("$ cd")) {
         var name = l[5..];
 
-        if (name == "..") current = current.Parent;
+        if (name == ".." && current.Parent != null) current = current.Parent;
         else if (name == "/") current = root;
         else current = current.Children[name];
       } else if (!l.StartsWith("$")) {
