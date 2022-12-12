@@ -7,6 +7,14 @@ using System.Net.Http;
 namespace aoc;
 
 public static class Helpers {
+  public static string Transpose(this string s, bool reverse = false) {
+    return string.Join("\n", s
+      .ToLines()
+      .SelectMany(x => x.Select((ch, i) => new { ch, i }))
+      .GroupBy(x => x.i, x => x.ch)
+      .Select(x => string.Join("", reverse ? Enumerable.Reverse(x.ToList()) : x.ToList())));
+  }
+
   public static bool IsSubset(int a1, int a2, int b1, int b2) => a1 <= b1 && b2 <= a2;
 
   public static bool Overlaps(int a1, int a2, int b1, int b2) => a2 >= b1 && b2 >= a1;
