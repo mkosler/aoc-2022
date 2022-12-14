@@ -76,11 +76,8 @@ public class Day14 : IDay {
 
     public void DropWithFloor(int x = 500, int y = 0) => DropWithFloor((x, y));
     public void DropWithFloor((int x, int y) sand) {
-      /* Console.WriteLine($"Dropping from ({sand.x}, {sand.y})..."); */
-      var oldY = sand.y;
       if (!_grid.Keys.Any(p => p.x == sand.x && p.y > sand.y && !IsAir(p))) {
         // We are in freefall; however, just add to the floor
-        /* Console.WriteLine("*************************Freefall"); */
         Set(sand.x, _floorY, State.Rock);
       }
 
@@ -93,18 +90,13 @@ public class Day14 : IDay {
 
       // Step backwards once
       sand = (sand.x, sand.y - 1);
-      /* Console.WriteLine($"Fell {sand.y - oldY}..."); */
-
-      /* Console.WriteLine($"Attempting to settle at ({sand.x}, {sand.y})..."); */
 
       // Check left diagonal
       if (IsAir(sand.x - 1, sand.y + 1)) {
         // Was that supposed to be floor?
         if (sand.y + 1 == _floorY) {
-          /* Console.WriteLine("Expand floor left..."); */
           Set(sand.x - 1, _floorY, State.Rock);
         } else {
-          /* Console.WriteLine("Redrop left..."); */
           DropWithFloor(sand.x - 1, sand.y + 1);
           return;
         }
@@ -114,17 +106,14 @@ public class Day14 : IDay {
       if (IsAir(sand.x + 1, sand.y + 1)) {
         // Was that supposed to be floor?
         if (sand.y + 1 == _floorY) {
-          /* Console.WriteLine("Expand floor right..."); */
           Set(sand.x + 1, _floorY, State.Rock);
         } else {
-          /* Console.WriteLine("Redrop right..."); */
           DropWithFloor(sand.x + 1, sand.y + 1);
           return;
         }
       }
 
       // Neither diagonals are open, so settle the sand here
-      /* Console.WriteLine("Settled"); */
       Set(sand, State.Sand);
     }
 
@@ -187,16 +176,6 @@ public class Day14 : IDay {
     while (!cave.Drop()) ;
 
     Console.WriteLine(cave.SandCount);
-
-    /* var count = 0; */
-    /* while (!cave.IsSpoutSandy()) { */
-    /*   cave.DropWithFloor(); */
-    /*   count++; */
-
-    /*   Console.WriteLine(cave); */
-    /* } */
-
-    /* Console.WriteLine(count); */
   }
 
   public void PartTwo(string input) {
@@ -204,15 +183,7 @@ public class Day14 : IDay {
     cave.SetFloor();
 
     while (!cave.IsSpoutSandy()) {
-    /* for (var i = 0; i < 100; i++) { */
       cave.DropWithFloor();
-
-      /* Console.WriteLine("====="); */
-      /* Console.WriteLine(cave); */
-      if (cave.IsTooTall()) {
-        Console.WriteLine(cave);
-        throw new Exception("Huh!?");
-      };
     }
 
     Console.WriteLine(cave.SandCount);
